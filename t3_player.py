@@ -34,7 +34,21 @@ def choose(state: "T3State") -> Optional["T3Action"]:
             from the given state by the criteria stated above.
     """
     # [!] TODO! Implement alpha-beta-pruning minimax search!
-    return None
+    if state.is_win() or state.is_tie(): return None
+    best_score: float = float("inf") if state._odd_turn else float("-inf")
+    best_action: Optional["T3Action"] = None
+    for transition in state.get_transitions():
+        # print("+++++++++ ", transition[0])
+        score = alphabeta(transition[1], float("-inf"), float("inf"), not transition[1]._odd_turn)
+        if state._odd_turn:
+            if best_score > score:
+                best_score = score
+                best_action = transition[0]
+        else:
+            if best_score < score:
+                best_score = score
+                best_action = transition[0]
+    return best_action
 
 # [Optional / Suggested] TODO! Add any helper methods or dataclasses needed to
 # manage the alpha-beta-pruning minimax operation
@@ -42,39 +56,36 @@ def choose(state: "T3State") -> Optional["T3Action"]:
 def alphabeta(state: "T3State", alpha: float, beta: float, is_max: bool) -> float:
     if state.is_tie(): return 0
     if state.is_win():
-        print("--", state._odd_turn, "--")
-        print(state)
-        return 1 if state._odd_turn else -1
+        # print("--", state._odd_turn, "--")
+        # print(state)
+        result = float(len(state.get_open_tiles())+1)
+        return result if state._odd_turn else -result
 
     if is_max:
         max_util: float = float('-inf')
-        for act, child in state.get_transitions():
-            print(act)
+        for _, child in state.get_transitions():
             util = alphabeta(child, alpha, beta, False)
             max_util = max(max_util, util)
             alpha = max(alpha, util)
             if beta <= alpha:
-                print("---------")
                 break
         return max_util
 
     else:
         min_util: float = float('inf')
-        for act, child in state.get_transitions():
-            print(act)
+        for _, child in state.get_transitions():
             util = alphabeta(child, alpha, beta, True)
             min_util = min(min_util, util)
             beta = min(beta, util)
             if beta <= alpha:
-                print("---------")
                 break
         return min_util
 
 state = T3State(False,
          [
-            [0, 0, 1],
-            [2, 0, 4],
-            [5, 1, 0]
+            [0, 0, 0],
+            [0, 5, 2],
+            [0, 0, 0]
         ])
-# print(state.is_win())
-print(alphabeta(state, float("-inf"), float("inf"), not state._odd_turn))
+
+print("********* ", choose(state))
