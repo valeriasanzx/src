@@ -5,7 +5,7 @@ Implements the alpha-beta-pruning mini-max search algorithm
 from dataclasses import *
 from typing import *
 from t3_state import *
-    
+
 def choose(state: "T3State") -> Optional["T3Action"]:
     """
     Main workhorse of the T3Player that makes the optimal decision from the max node
@@ -38,3 +38,43 @@ def choose(state: "T3State") -> Optional["T3Action"]:
 
 # [Optional / Suggested] TODO! Add any helper methods or dataclasses needed to
 # manage the alpha-beta-pruning minimax operation
+
+def alphabeta(state: "T3State", alpha: float, beta: float, is_max: bool) -> float:
+    if state.is_tie(): return 0
+    if state.is_win():
+        print("--", state._odd_turn, "--")
+        print(state)
+        return 1 if state._odd_turn else -1
+
+    if is_max:
+        max_util: float = float('-inf')
+        for act, child in state.get_transitions():
+            print(act)
+            util = alphabeta(child, alpha, beta, False)
+            max_util = max(max_util, util)
+            alpha = max(alpha, util)
+            if beta <= alpha:
+                print("---------")
+                break
+        return max_util
+
+    else:
+        min_util: float = float('inf')
+        for act, child in state.get_transitions():
+            print(act)
+            util = alphabeta(child, alpha, beta, True)
+            min_util = min(min_util, util)
+            beta = min(beta, util)
+            if beta <= alpha:
+                print("---------")
+                break
+        return min_util
+
+state = T3State(False,
+         [
+            [0, 0, 1],
+            [2, 0, 4],
+            [5, 1, 0]
+        ])
+# print(state.is_win())
+print(alphabeta(state, float("-inf"), float("inf"), not state._odd_turn))
