@@ -5,6 +5,7 @@ Implements the alpha-beta-pruning mini-max search algorithm
 from dataclasses import *
 from typing import *
 from t3_state import *
+import time
 
 def choose(state: "T3State") -> Optional["T3Action"]:
     """
@@ -34,12 +35,13 @@ def choose(state: "T3State") -> Optional["T3Action"]:
             from the given state by the criteria stated above.
     """
     # [!] TODO! Implement alpha-beta-pruning minimax search!
+    start = time.time()
     if state.is_win() or state.is_tie(): return None
     best_score: float = float("inf") if state._odd_turn else float("-inf")
     best_action: Optional["T3Action"] = None
     for transition in state.get_transitions():
         # print("+++++++++ ", transition[0])
-        score = alphabeta(transition[1], float("-inf"), float("inf"), not transition[1]._odd_turn)
+        score: float = alphabeta(transition[1], float("-inf"), float("inf"), not transition[1]._odd_turn)
         if state._odd_turn:
             if best_score > score:
                 best_score = score
@@ -48,6 +50,7 @@ def choose(state: "T3State") -> Optional["T3Action"]:
             if best_score < score:
                 best_score = score
                 best_action = transition[0]
+    print("********* ", "%.2f" % (time.time() - start), "secs")
     return best_action
 
 # [Optional / Suggested] TODO! Add any helper methods or dataclasses needed to
@@ -58,8 +61,8 @@ def alphabeta(state: "T3State", alpha: float, beta: float, is_max: bool) -> floa
     if state.is_win():
         # print("--", state._odd_turn, "--")
         # print(state)
-        result = float(len(state.get_open_tiles())+1)
-        return result if state._odd_turn else -result
+        utility: float = float(len(state.get_open_tiles())+1)
+        return utility if state._odd_turn else -utility
 
     if is_max:
         max_util: float = float('-inf')
@@ -80,12 +83,13 @@ def alphabeta(state: "T3State", alpha: float, beta: float, is_max: bool) -> floa
             if beta <= alpha:
                 break
         return min_util
-
+'''
 state = T3State(False,
          [
             [0, 0, 0],
-            [0, 5, 2],
+            [0, 5, 0],
             [0, 0, 0]
         ])
 
 print("********* ", choose(state))
+'''
