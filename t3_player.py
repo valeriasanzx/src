@@ -84,11 +84,11 @@ def alphabeta(state: "T3State", alpha: float, beta: float, is_max: bool) -> floa
                 break
         return min_util
 '''
-state = T3State(False,
+state = T3State(True,
          [
-            [0, 0, 0],
-            [0, 5, 0],
-            [0, 0, 0]
+            [2, 0, 0],
+            [1, 5, 0],
+            [6, 6, 1]
         ])
 
 print("********* ", choose(state))
