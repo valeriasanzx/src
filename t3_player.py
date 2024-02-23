@@ -5,7 +5,6 @@ Implements the alpha-beta-pruning mini-max search algorithm
 from dataclasses import *
 from typing import *
 from t3_state import *
-import time
 
 "Valeria Sanz Jones"
 
@@ -37,7 +36,6 @@ def choose(state: "T3State") -> Optional["T3Action"]:
             from the given state by the criteria stated above.
     """
     # [!] TODO! Implement alpha-beta-pruning minimax search!
-    start = time.time()
     if state.is_win() or state.is_tie(): return None
     best_score: float = float("inf") if state._odd_turn else float("-inf")
     best_action: Optional["T3Action"] = None
@@ -51,7 +49,6 @@ def choose(state: "T3State") -> Optional["T3Action"]:
             if best_score < score:
                 best_score = score
                 best_action = transition[0]
-    print("********* ", "%.2f" % (time.time() - start), "secs")
     return best_action
 
 # [Optional / Suggested] TODO! Add any helper methods or dataclasses needed to
