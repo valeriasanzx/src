@@ -82,4 +82,3 @@ def alphabeta(state: "T3State", alpha: float, beta: float, is_max: bool) -> floa
             if beta <= alpha:
                 break
         return min_util
-
