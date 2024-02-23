@@ -7,6 +7,8 @@ from typing import *
 from t3_state import *
 import time
 
+"Valeria Sanz Jones"
+
 def choose(state: "T3State") -> Optional["T3Action"]:
     """
     Main workhorse of the T3Player that makes the optimal decision from the max node
@@ -40,7 +42,6 @@ def choose(state: "T3State") -> Optional["T3Action"]:
     best_score: float = float("inf") if state._odd_turn else float("-inf")
     best_action: Optional["T3Action"] = None
     for transition in state.get_transitions():
-        # print("+++++++++ ", transition[0])
         score: float = alphabeta(transition[1], float("-inf"), float("inf"), not transition[1]._odd_turn)
         if state._odd_turn:
             if best_score > score:
@@ -59,8 +60,6 @@ def choose(state: "T3State") -> Optional["T3Action"]:
 def alphabeta(state: "T3State", alpha: float, beta: float, is_max: bool) -> float:
     if state.is_tie(): return 0
     if state.is_win():
-        # print("--", state._odd_turn, "--")
-        # print(state)
         utility: float = float(len(state.get_open_tiles())+1)
         return utility if state._odd_turn else -utility
 
@@ -83,13 +82,4 @@ def alphabeta(state: "T3State", alpha: float, beta: float, is_max: bool) -> floa
             if beta <= alpha:
                 break
         return min_util
-'''
-state = T3State(True,
-         [
-            [2, 0, 0],
-            [1, 5, 0],
-            [6, 6, 1]
-        ])
 
-print("********* ", choose(state))
-'''

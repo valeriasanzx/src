@@ -4,6 +4,8 @@ from t3_action import *
 import copy
 import itertools
 
+"Valeria Sanz Jones"
+
 @dataclass
 class T3State:
     """
